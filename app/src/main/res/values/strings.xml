@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">RoomDatabase</string>
+    <string name="add_user">Create Account</string>
+    <string name="entername">Enter Name</string>
+    <string name="password">Enter Password</string>
+    <string name="enter_user_name">Enter Email</string>
+    <string name="save">Save User</string>
+    <string name="welcome">Welcome</string>
+    <string name="login">Login</string>
+    <string name="sign_up">Register</string>
+    <string name="register_user">Sign up</string>
+    <string name="description_signup">Sign up today and get started!</string>
+    <string name="enter_confirm_password">Enter Confirm Password</string>
+    <string name="already_have_an_account">Already have an account</string>
+    <string name="login_here">Login here</string>
+    <string name="login_description">Welcome back you’ve \n been missed!</string>
+    <string name="sign_in">Sign In</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="name">Name :-</string>
+    <string name="user_name">Email :-</string>
+    <string name="dashboard_password">Password :-</string>
+    <string name="update">Update</string>
+    <string name="delete">Delete</string>
+    <string name="enterCity">Enter City</string>
+    <string name="enterPhoneNo">Enter Phone Number</string>
+    <string name="phoneNo">Phone Number :-</string>
+    <string name="city">City :-</string>
+    <string name="updateUser">Update Data</string>
+</resources>
