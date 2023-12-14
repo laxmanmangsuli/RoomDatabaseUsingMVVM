@@ -19,5 +19,8 @@ interface UserDAO {
     @Query("DELETE FROM UserModel WHERE userEmail = :userEmail")
     suspend fun deleteByUserId(userEmail: String) :Int
 
+    @Query("SELECT * FROM userModel")
+    suspend fun getAllUsers(): List<UserModel>
+
 
 }

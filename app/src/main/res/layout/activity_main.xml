@@ -63,6 +63,14 @@
                     android:text="@string/description_signup"
                     android:textSize="@dimen/_16sdp" />
 
+                <Spinner
+                    android:id="@+id/spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/_10sdp"
+                    android:entries="@array/department"
+                    android:layout_marginTop="@dimen/_35sdp"/>
+
                 <EditText
                     android:id="@+id/etName"
                     android:layout_width="match_parent"
@@ -100,6 +108,7 @@
                     tools:ignore="RtlSymmetry" />
 
                 <LinearLayout
+                    android:id="@+id/lLSend"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_15sdp"
@@ -132,6 +141,7 @@
                     android:text="@string/send_otp"/>
                 </LinearLayout>
                 <LinearLayout
+                    android:id="@+id/lLVerify"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_15sdp"
@@ -199,7 +209,7 @@
                 android:layout_marginTop="@dimen/_25sdp"
                 android:text="@string/register_user"
                 android:textAllCaps="false"
-                android:textColor="@color/white"
+                android:background="@drawable/backgrounds"
                 android:textSize="@dimen/_18sdp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

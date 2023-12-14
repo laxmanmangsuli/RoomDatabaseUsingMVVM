@@ -1,4 +1,9 @@
 <resources>
+    <string-array name="department">
+        <item>Select Department</item>
+        <item>User</item>
+        <item>Admin</item>
+    </string-array>
     <string name="app_name">RoomDatabase</string>
     <string name="add_user">Create Account</string>
     <string name="entername">Enter Name</string>
@@ -13,7 +18,7 @@
     <string name="enter_confirm_password">Enter Confirm Password</string>
     <string name="already_have_an_account">Already have an account</string>
     <string name="login_here">Login here</string>
-    <string name="login_description">Welcome back you’ve \n been missed!</string>
+    <string name="login_description">Welcome back you’ve been missed!</string>
     <string name="sign_in">Sign In</string>
     <string name="dashboard">Dashboard</string>
     <string name="name">Name :-</string>

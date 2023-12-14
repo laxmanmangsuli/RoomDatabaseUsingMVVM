@@ -6,12 +6,17 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.util.Patterns
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.example.roomdatabase.R
 import com.example.roomdatabase.constants.COUNTDOWN_DURATION
 import com.example.roomdatabase.constants.COUNTDOWN_INTERVAL
 import com.example.roomdatabase.constants.Constants
 import com.example.roomdatabase.databinding.ActivityMainBinding
+import com.example.roomdatabase.model.AdminDatabase
+import com.example.roomdatabase.model.AdminModel
 import com.example.roomdatabase.model.UserDatabase
 import com.example.roomdatabase.model.UserModel
 import com.google.firebase.Firebase
@@ -28,7 +33,9 @@ import java.util.concurrent.TimeUnit
 class SignUpActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val userDatabase = UserDatabase
+    private val adminDatabase = AdminDatabase
     private var userModel: UserModel? = null
+    private var adminModel: AdminModel? = null
     private lateinit var auth: FirebaseAuth
     private var verificationId: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,15 +43,10 @@ class SignUpActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.btnSave.isEnabled =false
-
         binding.ivBack.setOnClickListener {
             finish()
         }
 
-        binding.btnSave.setOnClickListener {
-            createAccount()
-        }
 
         binding.tvAlreadyHaveAccount.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
@@ -64,7 +66,6 @@ class SignUpActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         binding.btnRequestOtp.setOnClickListener {
             val phoneNumber = "+91${binding.etUserMobileNo.text.toString().trim()}"
-
             if (phoneNumber.isNotEmpty()) {
                 binding.btnRequestOtp.text = getString(R.string.wait)
                 binding.btnRequestOtp.isClickable = false
@@ -82,7 +83,162 @@ class SignUpActivity : AppCompatActivity() {
             }
         }
 
+        val department = resources.getStringArray(R.array.department)
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, department)
+        binding.spinner.adapter = adapter
+
+        binding.spinner.onItemSelectedListener = object :
+            AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View, position: Int, id: Long
+            ) {
+                accountCreate(position)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+
+            }
+        }
+
     }
+
+    private fun accountCreate(position: Int) {
+        binding.lLSend.visibility = View.VISIBLE
+        binding.lLVerify.visibility = View.VISIBLE
+        binding.etUserCity.visibility = View.VISIBLE
+        binding.btnSave.isEnabled =true
+        if (position == 1) {
+            binding.btnSave.isEnabled =false
+            binding.btnSave.setOnClickListener {
+                val name = binding.etName.text.toString()
+                val userEmail = binding.etUserName.text.toString()
+                val password = binding.etUserPassword.text.toString()
+                val city = binding.etUserCity.text.toString()
+                val phoneNo = binding.etUserMobileNo.text.toString()
+                val confirmPassword = binding.etUserConfirmPassword.text.toString()
+                if (name.isNotEmpty() && userEmail.isNotEmpty() && password.isNotEmpty()) {
+                    if (isEmailValid(userEmail)) {
+                        if (password == confirmPassword) {
+                            userModel =
+                                UserModel(
+                                    userName = name,
+                                    userEmail = userEmail,
+                                    userPhoneNumber = phoneNo,
+                                    userCity = city,
+                                    userPassword = password
+                                )
+                            CoroutineScope(Dispatchers.Main).launch {
+                                val result =
+                                    userDatabase.getDatabase(this@SignUpActivity).userDao()
+                                        .addUser(userModel!!)
+                                if (result != -1L) {
+                                    startActivity(
+                                        Intent(
+                                            this@SignUpActivity,
+                                            LoginActivity::class.java
+                                        )
+                                    )
+                                    Toast.makeText(
+                                        this@SignUpActivity,
+                                        "Account Created",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    finish()
+                                } else {
+                                    Toast.makeText(
+                                        this@SignUpActivity,
+                                        "Failed to create account",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+
+                            }
+                        } else {
+                            Toast.makeText(
+                                this,
+                                "Password and confirm password not match",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    } else {
+                        Toast.makeText(this, "Invalid email req. abc@gmail.com", Toast.LENGTH_SHORT)
+                            .show()
+
+                    }
+                } else {
+                    Toast.makeText(this, "Required all Field", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+            else if (position == 2) {
+            binding.lLSend.visibility = View.GONE
+            binding.lLVerify.visibility = View.GONE
+            binding.etUserCity.visibility = View.GONE
+            binding.btnSave.setOnClickListener {
+                val name = binding.etName.text.toString()
+                val userEmail = binding.etUserName.text.toString()
+                val password = binding.etUserPassword.text.toString()
+
+                val confirmPassword = binding.etUserConfirmPassword.text.toString()
+                if (name.isNotEmpty() && userEmail.isNotEmpty() && password.isNotEmpty()) {
+                    if (isEmailValid(userEmail)) {
+                        if (password == confirmPassword) {
+                           adminModel =
+                                AdminModel(
+                                    adminName = name,
+                                    adminEmail = userEmail,
+                                    adminPassword = password
+                                )
+                            CoroutineScope(Dispatchers.Main).launch {
+                                val result =
+                                    adminDatabase.getDatabase(this@SignUpActivity).adminDao()
+                                        .addUser(adminModel!!)
+                                if (result != -1L) {
+                                    startActivity(
+                                        Intent(
+                                            this@SignUpActivity,
+                                            LoginActivity::class.java
+                                        )
+                                    )
+                                    Toast.makeText(
+                                        this@SignUpActivity,
+                                        "Account Created",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    finish()
+                                } else {
+                                    Toast.makeText(
+                                        this@SignUpActivity,
+                                        "Failed to create account",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+
+                            }
+                        } else {
+                            Toast.makeText(
+                                this,
+                                "Password and confirm password not match",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    } else {
+                        Toast.makeText(this, "Invalid email req. abc@gmail.com", Toast.LENGTH_SHORT)
+                            .show()
+
+                    }
+                }else {
+                    Toast.makeText(this, "Required all Field", Toast.LENGTH_SHORT).show()
+                }
+            }
+            }else{
+            binding.btnSave.setOnClickListener {
+                Toast.makeText(this, "Select Department", Toast.LENGTH_SHORT).show()
+            }
+            }
+        }
+
 
     private fun requestOtp(phoneNumber: String) {
         val options = PhoneAuthOptions.newBuilder(auth)
@@ -135,49 +291,6 @@ class SignUpActivity : AppCompatActivity() {
             }
     }
 
-    private fun createAccount() {
-        val name = binding.etName.text.toString()
-        val userEmail = binding.etUserName.text.toString()
-        val password = binding.etUserPassword.text.toString()
-        val city = binding.etUserCity.text.toString()
-        val phoneNo = binding.etUserMobileNo.text.toString()
-        val confirmPassword = binding.etUserConfirmPassword.text.toString()
-        if (name.isNotEmpty()&&userEmail.isNotEmpty()&&password.isNotEmpty()) {
-            if (isEmailValid(userEmail)) {
-                if (password == confirmPassword) {
-                    userModel =
-                        UserModel(
-                            userName = name,
-                            userEmail = userEmail,
-                            userPhoneNumber = phoneNo,
-                            userCity = city,
-                            userPassword = password
-                        )
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val result =
-                            userDatabase.getDatabase(this@SignUpActivity).userDao()
-                                .addUser(userModel!!)
-                        if (result != -1L) {
-                            startActivity(Intent(this@SignUpActivity, LoginActivity::class.java))
-                            Toast.makeText(this@SignUpActivity, "Account Created", Toast.LENGTH_SHORT).show()
-                            finish()
-                        } else {
-                            Toast.makeText(this@SignUpActivity, "Failed to create account", Toast.LENGTH_SHORT).show()
-                        }
-
-                    }
-                } else {
-                    Toast.makeText(this, "Password and confirm password not match", Toast.LENGTH_SHORT).show()
-                }
-            }else{
-                Toast.makeText(this, "Invalid email req. abc@gmail.com", Toast.LENGTH_SHORT).show()
-
-            }
-        }
-            else {
-            Toast.makeText(this, "Required all Field", Toast.LENGTH_SHORT).show()
-        }
-    }
 
     private fun isEmailValid(email: String): Boolean {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches()

@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.roomdatabase.constants.isOnBackPress
 import com.example.roomdatabase.databinding.ActivityDashBoardBinding
 import com.example.roomdatabase.model.UserDatabase
 import kotlinx.coroutines.CoroutineScope
@@ -25,8 +26,9 @@ class DashBoardActivity : AppCompatActivity() {
             showDefaultDialog(this, email)
         }
         binding.ivLogOut.setOnClickListener {
-            startActivity(Intent(this,LoginActivity::class.java))
             finish()
+            startActivity(Intent(this,LoginActivity::class.java))
+
 
         }
 
@@ -52,6 +54,7 @@ class DashBoardActivity : AppCompatActivity() {
                 intent.putExtra("phoneNo", user?.userPhoneNumber)
                 intent.putExtra("password", user?.userPassword)
                 startActivity(intent)
+                finish()
             }
 
         }
@@ -90,6 +93,10 @@ class DashBoardActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        finishAffinity()
+        if (isOnBackPress){
+            onBackPressedDispatcher.onBackPressed()
+        }else{
+            finishAffinity()
+        }
     }
 }

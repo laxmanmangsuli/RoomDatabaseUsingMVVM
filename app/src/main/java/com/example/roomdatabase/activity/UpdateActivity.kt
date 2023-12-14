@@ -65,8 +65,14 @@ class UpdateActivity : AppCompatActivity() {
                 intent.putExtra("email",email)
                 startActivity(intent)
                 finish()
+
             }
         }
 
     }
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
+    }
+
 }
