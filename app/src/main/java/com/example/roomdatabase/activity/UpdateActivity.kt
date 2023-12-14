@@ -64,6 +64,7 @@ class UpdateActivity : AppCompatActivity() {
                 val intent =Intent(this@UpdateActivity,DashBoardActivity::class.java)
                 intent.putExtra("email",email)
                 startActivity(intent)
+                finish()
             }
         }
 

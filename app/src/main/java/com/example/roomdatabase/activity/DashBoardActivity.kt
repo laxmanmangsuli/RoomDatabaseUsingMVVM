@@ -27,6 +27,7 @@ class DashBoardActivity : AppCompatActivity() {
         binding.ivLogOut.setOnClickListener {
             startActivity(Intent(this,LoginActivity::class.java))
             finish()
+
         }
 
         CoroutineScope(Dispatchers.Main).launch {
