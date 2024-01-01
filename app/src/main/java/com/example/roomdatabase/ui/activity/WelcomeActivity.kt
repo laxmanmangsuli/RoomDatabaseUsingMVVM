@@ -1,4 +1,4 @@
-package com.example.roomdatabase.activity
+package com.example.roomdatabase.ui.activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -40,5 +40,9 @@ class WelcomeActivity : AppCompatActivity() {
             }
         }
 
+    }
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finishAffinity()
     }
 }

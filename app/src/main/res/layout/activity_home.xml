@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.LoginActivity">
+    tools:context=".ui.activity.LoginActivity">
 
     <LinearLayout
         android:id="@+id/lLTitle"
@@ -65,6 +65,7 @@
             android:id="@+id/spinner"
             android:layout_width="match_parent"
             android:padding="@dimen/_10sdp"
+            android:background="@drawable/add_background"
             android:entries="@array/department"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_35sdp"/>

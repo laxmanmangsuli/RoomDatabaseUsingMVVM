@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.SignUpActivity">
+    tools:context=".ui.activity.SignUpActivity">
 
     <LinearLayout
         android:id="@+id/lLTitle"
@@ -135,6 +135,7 @@
                     android:textColor="@color/white"
                     android:background="@drawable/button_background"
                     android:gravity="center"
+                    android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/_10sdp"
                     android:layout_weight=".3"
@@ -143,6 +144,7 @@
                 <LinearLayout
                     android:id="@+id/lLVerify"
                     android:layout_width="match_parent"
+                    android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_15sdp"
                     android:orientation="horizontal">

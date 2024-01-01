@@ -1,12 +1,14 @@
-package com.example.roomdatabase.adapter
+package com.example.roomdatabase.ui.activity.adapter
 
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.roomdatabase.activity.DashBoardActivity
-import com.example.roomdatabase.constants.isOnBackPress
+import com.example.roomdatabase.ui.activity.DashBoardActivity
+import com.example.roomdatabase.utility.isOnBackPress
 import com.example.roomdatabase.databinding.ItemUserLayoutBinding
 import com.example.roomdatabase.model.UserModel
 
@@ -15,9 +17,10 @@ class UserAdapter(private val userList:List<UserModel>,private val  context: Con
 
     }
 
+    @SuppressLint("SuspiciousIndentation")
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
-     val binding = ItemUserLayoutBinding.inflate(LayoutInflater.from(parent.context),null,false)
+        val binding = ItemUserLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
@@ -29,7 +32,7 @@ class UserAdapter(private val userList:List<UserModel>,private val  context: Con
         val uList =userList[position]
         holder.binding.tvName.text = uList.userName
         holder.binding.root.setOnClickListener {
-            val intent =Intent(context,DashBoardActivity::class.java)
+            val intent =Intent(context, DashBoardActivity::class.java)
             intent.putExtra("email",uList.userEmail)
             isOnBackPress = true
             context.startActivity(intent)

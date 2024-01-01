@@ -1,32 +1,35 @@
-package com.example.roomdatabase.activity
+package com.example.roomdatabase.ui.activity
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import com.example.roomdatabase.R
-import com.example.roomdatabase.constants.isOnBackPress
 import com.example.roomdatabase.databinding.ActivityHomeBinding
-import com.example.roomdatabase.model.AdminDatabase
-import com.example.roomdatabase.model.UserDatabase
-import com.example.roomdatabase.model.UserModel
+import com.example.roomdatabase.utility.isOnBackPress
+import com.example.roomdatabase.utility.showToast
+import com.example.roomdatabase.viewmodel.AdminViewModel
+import com.example.roomdatabase.viewmodel.UserViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding
-    private val userDatabase = UserDatabase
-    private val adminDatabase = AdminDatabase
+    private  val adminViewModel: AdminViewModel by viewModels()
+    private  val userViewModel: UserViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
+        isOnBackPress = false
         binding.ivBack.setOnClickListener {
+            startActivity(Intent(this,WelcomeActivity::class.java))
             finish()
         }
 
@@ -69,10 +72,10 @@ class LoginActivity : AppCompatActivity() {
                     val email = binding.etUserName.text.toString()
                     val password = binding.etUserPassword.text.toString()
                     if (email.isNotEmpty() && password.isNotEmpty()) {
-                        CoroutineScope(Dispatchers.Main).launch {
-                            val user =
-                                userDatabase.getDatabase(this@LoginActivity).userDao()
-                                    .getUserByEmail(email)
+                        CoroutineScope(Dispatchers.IO).launch {
+
+
+                            val user = userViewModel.getUserByEmail(email)
                             if (user != null) {
                                 if (user.userEmail == email && user.userPassword == password) {
                                     val intent =
@@ -80,26 +83,19 @@ class LoginActivity : AppCompatActivity() {
                                     intent.putExtra("email", user.userEmail)
                                     startActivity(intent)
                                     isOnBackPress = false
-                                    Toast.makeText(
-                                        this@LoginActivity,
-                                        "Login Successfully",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                                    showToast(this@LoginActivity, "Login Successfully")
                                     finish()
                                 } else {
-                                    Toast.makeText(
-                                        this@LoginActivity,
-                                        "email and password not match ",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                                    showToast(this@LoginActivity, "email and password not match")
+
                                 }
                             } else {
-                                Toast.makeText(this@LoginActivity, "Data not found", Toast.LENGTH_SHORT)
-                                    .show()
+                                showToast(this@LoginActivity, "Data not found")
                             }
                         }
+
                     } else {
-                        Toast.makeText(this, "Email and Password is Empty", Toast.LENGTH_SHORT).show()
+                        showToast(this@LoginActivity, "Email and Password is Empty")
                     }
                 }
             }
@@ -108,46 +104,45 @@ class LoginActivity : AppCompatActivity() {
                     val email = binding.etUserName.text.toString()
                     val password = binding.etUserPassword.text.toString()
                     if (email.isNotEmpty() && password.isNotEmpty()) {
-                        CoroutineScope(Dispatchers.Main).launch {
-                            val admin =
-                                adminDatabase.getDatabase(this@LoginActivity).adminDao()
-                                    .getAdminByEmail(email)
-                            if (admin != null) {
-                                if (admin.adminEmail == email && admin.adminPassword == password) {
-                                    val intent =
-                                        Intent(this@LoginActivity, ShowAllUserActivity::class.java)
-                                    intent.putExtra("email", admin.adminEmail)
-                                    startActivity(intent)
-                                    Toast.makeText(
-                                        this@LoginActivity,
-                                        "Login Successfully",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                    finish()
+                        CoroutineScope(Dispatchers.IO).launch {
+                            val admin =adminViewModel.getAdminByEmail(email)
+                                if (admin != null) {
+                                    if (admin.adminEmail == email && admin.adminPassword == password) {
+                                        val intent =
+                                            Intent(
+                                                this@LoginActivity,
+                                                ShowAllUserActivity::class.java
+                                            )
+                                        intent.putExtra("email", admin.adminEmail)
+                                        startActivity(intent)
+                                        showToast(this@LoginActivity, "Login Successfully")
+                                        finish()
+                                    } else {
+                                        showToast(this@LoginActivity, "email and password not match")
+                                    }
                                 } else {
-                                    Toast.makeText(
-                                        this@LoginActivity,
-                                        "email and password not match ",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                                    showToast(this@LoginActivity, "Data not found")
                                 }
-                            } else {
-                                Toast.makeText(this@LoginActivity, "Data not found", Toast.LENGTH_SHORT)
-                                    .show()
-                            }
+
                         }
                     } else {
-                        Toast.makeText(this, "Email and Password is Empty", Toast.LENGTH_SHORT).show()
+                        showToast(this@LoginActivity, "Email and Password is Empty")
                     }
 
                 }
             }
             else -> {
                 binding.btnSignIn.setOnClickListener {
-                    Toast.makeText(this, "Select Department", Toast.LENGTH_SHORT).show()
+                    showToast(this@LoginActivity, "Select Department")
                 }
             }
         }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        startActivity(Intent(this,WelcomeActivity::class.java))
+        finish()
     }
 }
 

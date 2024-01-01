@@ -56,6 +56,8 @@ dependencies {
     //ssp
         implementation ("com.intuit.ssp:ssp-android:1.1.0")
 
+    implementation ("androidx.activity:activity-ktx:1.8.2")
+
     //room
     val room_version = "2.6.0"
     implementation ("androidx.room:room-ktx:$room_version")

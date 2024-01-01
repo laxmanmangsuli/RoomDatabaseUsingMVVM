@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".application.RoomApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -22,22 +23,22 @@
         android:theme="@style/Theme.RoomDatabase"
         tools:targetApi="31">
         <activity
-            android:name=".activity.ShowAllUserActivity"
+            android:name=".ui.activity.ShowAllUserActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.UpdateActivity"
+            android:name=".ui.activity.UpdateActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.DashBoardActivity"
+            android:name=".ui.activity.DashBoardActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.LoginActivity"
+            android:name=".ui.activity.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.SignUpActivity"
+            android:name=".ui.activity.SignUpActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.WelcomeActivity"
+            android:name=".ui.activity.WelcomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

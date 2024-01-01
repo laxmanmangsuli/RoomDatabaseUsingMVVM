@@ -1,20 +1,23 @@
-package com.example.roomdatabase.activity
+package com.example.roomdatabase.ui.activity
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.viewModels
 import com.example.roomdatabase.R
 import com.example.roomdatabase.databinding.ActivityUpdateBinding
 import com.example.roomdatabase.model.UserDatabase
 import com.example.roomdatabase.model.UserModel
+import com.example.roomdatabase.utility.showToast
+import com.example.roomdatabase.viewmodel.UserViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class UpdateActivity : AppCompatActivity() {
     private lateinit var binding:ActivityUpdateBinding
-    private val userDatabase = UserDatabase
+    private val userViewModel : UserViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityUpdateBinding.inflate(layoutInflater)
@@ -57,14 +60,14 @@ class UpdateActivity : AppCompatActivity() {
             userPassword = password!!
         )
 
-        CoroutineScope(Dispatchers.Main).launch {
-            val user = userDatabase.getDatabase(this@UpdateActivity).userDao().updateUser(userModel)
-            if (user !=-1){
-                Toast.makeText(this@UpdateActivity, "Data Updated Successfully", Toast.LENGTH_SHORT).show()
-                val intent =Intent(this@UpdateActivity,DashBoardActivity::class.java)
-                intent.putExtra("email",email)
-                startActivity(intent)
-                finish()
+        CoroutineScope(Dispatchers.IO).launch {
+            val user =userViewModel.updateUser(userModel)
+            if (user !=-1) {
+                    showToast(this@UpdateActivity, "Data Updated Successfully")
+                    val intent = Intent(this@UpdateActivity, DashBoardActivity::class.java)
+                    intent.putExtra("email", email)
+                    startActivity(intent)
+                    finish()
 
             }
         }

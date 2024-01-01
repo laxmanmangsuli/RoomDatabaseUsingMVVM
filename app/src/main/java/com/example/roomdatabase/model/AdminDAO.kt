@@ -7,9 +7,9 @@ import androidx.room.Query
 @Dao
 interface AdminDAO {
     @Insert
-    suspend fun addUser(adminModel: AdminModel): Long
+     fun addAdmin(adminModel: AdminModel): Long
 
     @Query("SELECT * FROM AdminModel WHERE adminEmail = :email")
-    suspend fun getAdminByEmail(email: String): AdminModel?
+     fun getAdminByEmail(email: String): AdminModel?
 
 }
